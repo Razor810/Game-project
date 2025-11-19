@@ -1,4 +1,4 @@
-const emojis = ['🍕', '🚀', '🐶', '🎮', '🌈', '⚽'];
+const emojis = ['🍕', '🚀', '🐶', '🎮', '🌈', '⚽','🍩','🔥'];
 const board = document.getElementById('game-board');
 const resetButton = document.getElementById('reset-button');
 
