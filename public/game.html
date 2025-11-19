@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Emoji Memory Match</title>
+  <meta charset="UTF-8" />
+  <title>Endless Runner</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <h1>🧠 Emoji Memory Match</h1>
-  <div id="game-board"></div>
-  <button id="reset-button">Opnieuw spelen</button>
+  <h1>🏃 Endless Runner</h1>
+  <div id="ui">
+    <div id="score">Score: 0</div>
+    <button id="restart" disabled>Opnieuw spelen</button>
+  </div>
+  <canvas id="game" width="800" height="300"></canvas>
+  <div class="hint">Spring met spatie of pijltje omhoog. Ontwijk de blokken!</div>
+
   <script src="assets/javascript/javascript.js"></script>
 </body>
 </html>

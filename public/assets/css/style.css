@@ -1,40 +1,49 @@
-/* style.css */
 body {
-  font-family: sans-serif;
-  text-align: center;
-  background-color: #f0f0f0;
+  margin: 0;
+  background:#1e1e1e;
+  color:#fff;
+  font-family: system-ui;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
-#game-board {
-  display: grid;
-  grid-template-columns: repeat(4, 100px);
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
+h1 {
+  margin: 16px 0 0;
 }
 
-.card {
-  width: 100px;
-  height: 100px;
-  font-size: 2rem;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.reset-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  background-color: #000000;
-  color: white;
-  border: none;
-  border-radius: 5px;
+#ui {
+  display:flex;
+  gap:16px;
+  align-items:center;
+  margin: 8px 0 16px;
 }
 
-.reset-button:hover {
-  background-color: #45a049;
+#score {
+  font-weight: 600;
+}
+
+#game {
+  background:#222;
+  border:2px solid #444;
+}
+
+button {
+  padding:8px 14px;
+  border:none;
+  border-radius:6px;
+  background:#4CAF50;
+  color:#fff;
+  cursor:pointer;
+}
+
+button:disabled {
+  background:#2e2e2e;
+  cursor:default;
+}
+
+.hint {
+  color:#bbb;
+  font-size: 0.9rem;
+  margin-top: 6px;
 }
