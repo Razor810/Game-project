@@ -188,15 +188,17 @@ function loop() {
 
 // ---------------- CONTROLS ----------------
 
-// Springen met spatie
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && running) {
+  // check of toets spatie of pijltje omhoog is
+  if ((e.code === 'Space' || e.code === 'ArrowUp') && running) {
     // ook springen als je bijna op de grond bent
     if (player.onGround || player.y > groundY - player.h - 5) {
       player.vy = jumpForce;
     }
   }
 });
+
+
 
 // Restart knop
 restartBtn.addEventListener('click', () => {
