@@ -1,21 +1,36 @@
+// Pak het canvas en de teken-context
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
+// UI elementen voor score en restart-knop
 const scoreEl = document.getElementById('score');
 const restartBtn = document.getElementById('restart');
 
-const groundY = 260;
-const gravity = 0.8;
-const jumpForce = -12;
-const speed = 6;
+// Basis spelinstellingen
+const groundY = 260;     // hoogte van de grondlijn
+const gravity = 0.6;     // zwaartekracht (hoe snel je valt)
+const jumpForce = -11;   // sprongkracht (negatief = omhoog)
+let speed = 4;           // beginsnelheid van obstakels
 
-const player = { x: 80, y: groundY - 40, w: 40, h: 40, vy: 0, onGround: true, color: 'aqua' };
-let obstacles = [];
-let spawnTimer = 0;
-let running = true;
-let score = 0;
+// Speler object
+const player = { 
+  x: 80,                 // horizontale positie
+  y: groundY - 40,       // verticale positie (op de grond)
+  w: 40, h: 40,          // breedte en hoogte
+  vy: 0,                 // verticale snelheid
+  onGround: true,        // staat speler op de grond?
+  color: 'aqua'          // kleur van het blokje
+};
 
-// ✅ Cookie helpers
+// Variabelen voor spelstatus
+let obstacles = [];      // lijst met obstakels
+let spawnTimer = 0;      // timer voor nieuwe obstakels
+let running = true;      // is het spel bezig?
+let score = 0;           // huidige score
+
+// ---------------- COOKIE FUNCTIES VOOR HIGHSCORE ----------------
+
+// Zet een cookie
 function setCookie(name, value, days) {
   const d = new Date();
   d.setTime(d.getTime() + (days*24*60*60*1000));
@@ -23,6 +38,7 @@ function setCookie(name, value, days) {
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
+// Haal een cookie op
 function getCookie(name) {
   const cname = name + "=";
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -36,7 +52,7 @@ function getCookie(name) {
   return "";
 }
 
-// ✅ Highscore functies
+// Sla highscore op als huidige score hoger is
 function saveHighscore(score) {
   const highscore = parseInt(getCookie("highscore") || "0", 10);
   if (score > highscore) {
@@ -44,10 +60,14 @@ function saveHighscore(score) {
   }
 }
 
+// Haal highscore op
 function getHighscore() {
   return parseInt(getCookie("highscore") || "0", 10);
 }
 
+// ---------------- SPELFUNCTIES ----------------
+
+// Reset spel naar beginstand
 function resetGame() {
   player.y = groundY - player.h;
   player.vy = 0;
@@ -55,26 +75,38 @@ function resetGame() {
   obstacles = [];
   spawnTimer = 0;
   score = 0;
+  speed = 4; // reset snelheid
   running = true;
   restartBtn.disabled = true;
   scoreEl.textContent = 'Score: 0 | Highscore: ' + getHighscore();
 }
 
+// Maak een nieuw obstakel
 function spawnObstacle() {
-  const w = Math.random() < 0.5 ? 30 : 50;
-  const h = Math.random() < 0.5 ? 40 : 60;
+  const w = Math.random() < 0.5 ? 30 : 45; // willekeurige breedte
+  const h = Math.random() < 0.5 ? 40 : 50; // willekeurige hoogte
   obstacles.push({ x: canvas.width + 20, y: groundY - h, w, h, color: '#FF5252' });
 }
 
+// Update spelstatus (score, speler, obstakels)
 function update() {
   if (!running) return;
 
-  score += 1;
-  scoreEl.textContent = 'Score: ' + score + ' | Highscore: ' + getHighscore();
+  score += 1; // score loopt op
 
+  // snelheid vloeiend verhogen met score
+  speed = 4 + (score / 3000); 
+
+  // update score tekst
+  scoreEl.textContent = 'Score: ' + score + 
+                        ' | Highscore: ' + getHighscore() + 
+                        ' | Speed: ' + speed.toFixed(2);
+
+  // zwaartekracht toepassen
   player.vy += gravity;
   player.y += player.vy;
 
+  // check of speler op de grond staat
   if (player.y + player.h >= groundY) {
     player.y = groundY - player.h;
     player.vy = 0;
@@ -83,18 +115,21 @@ function update() {
     player.onGround = false;
   }
 
+  // obstakels spawnen
   spawnTimer--;
   if (spawnTimer <= 0) {
     spawnObstacle();
-    const base = Math.max(40, 120 - Math.floor(score / 100));
+    const base = Math.max(60, 140 - Math.floor(score / 200));
     spawnTimer = base + Math.floor(Math.random() * 40);
   }
 
+  // obstakels bewegen
   for (let i = obstacles.length - 1; i >= 0; i--) {
     obstacles[i].x -= speed;
     if (obstacles[i].x + obstacles[i].w < 0) obstacles.splice(i, 1);
   }
 
+  // botsing check
   for (const o of obstacles) {
     if (player.x < o.x + o.w && player.x + player.w > o.x && player.y < o.y + o.h && player.y + player.h > o.y) {
       gameOver();
@@ -103,28 +138,36 @@ function update() {
   }
 }
 
+// Game over
 function gameOver() {
   running = false;
   restartBtn.disabled = false;
-  saveHighscore(score); // ✅ highscore opslaan
+  saveHighscore(score); // highscore opslaan
 }
 
+// Teken alles op canvas
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#1b1b1b';
+
+  // achtergrond
+  ctx.fillStyle = '#02a6ffff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#2e2e2e';
-  ctx.fillRect(0, groundY, canvas.width, 4);
+  // grondlijn
+  ctx.fillStyle = '#04ff00ff';
+  ctx.fillRect(2, groundY, canvas.width, 4);
 
+  // speler
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.w, player.h);
 
+  // obstakels
   for (const o of obstacles) {
     ctx.fillStyle = o.color;
     ctx.fillRect(o.x, o.y, o.w, o.h);
   }
 
+  // game over overlay
   if (!running) {
     ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -136,24 +179,30 @@ function draw() {
   }
 }
 
+// Hoofdloop van het spel
 function loop() {
   update();
   draw();
   requestAnimationFrame(loop);
 }
 
-// Jump event
+// ---------------- CONTROLS ----------------
+
+// Springen met spatie
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && player.onGround && running) {
-    player.vy = jumpForce;
+  if (e.code === 'Space' && running) {
+    // ook springen als je bijna op de grond bent
+    if (player.onGround || player.y > groundY - player.h - 5) {
+      player.vy = jumpForce;
+    }
   }
 });
 
-// Restart button
+// Restart knop
 restartBtn.addEventListener('click', () => {
   resetGame();
 });
 
-// Start game
+// Start spel
 resetGame();
 loop();
