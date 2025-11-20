@@ -6,6 +6,11 @@ const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const restartBtn = document.getElementById('restart');
 
+// Laad de sprite-afbeelding
+const playerImg = new Image();
+playerImg.src = 'assets/images/New Piskel.png';
+
+
 // Basis spelinstellingen
 const groundY = 260;     // hoogte van de grondlijn
 const gravity = 0.6;     // zwaartekracht (hoe snel je valt)
@@ -14,13 +19,13 @@ let speed = 4;           // beginsnelheid van obstakels
 
 // Speler object
 const player = { 
-  x: 80,                 // horizontale positie
-  y: groundY - 40,       // verticale positie (op de grond)
-  w: 40, h: 40,          // breedte en hoogte
-  vy: 0,                 // verticale snelheid
-  onGround: true,        // staat speler op de grond?
-  color: 'aqua'          // kleur van het blokje
+  x: 120,
+  y: groundY - 60,   // hoogte aanpassen zodat hij op de grond staat
+  w: 60, h: 60,      // groter formaat (bijv. 80x80)
+  vy: 0,
+  onGround: true,
 };
+
 
 // Variabelen voor spelstatus
 let obstacles = [];      // lijst met obstakels
@@ -85,7 +90,7 @@ function resetGame() {
 function spawnObstacle() {
   const w = Math.random() < 0.5 ? 30 : 45; // willekeurige breedte
   const h = Math.random() < 0.5 ? 40 : 50; // willekeurige hoogte
-  obstacles.push({ x: canvas.width + 20, y: groundY - h, w, h, color: '#FF5252' });
+  obstacles.push({ x: canvas.width + 20, y: groundY - h, w, h, color: '#000000ff' });
 }
 
 // Update spelstatus (score, speler, obstakels)
@@ -113,7 +118,18 @@ function update() {
     player.onGround = true;
   } else {
     player.onGround = false;
+  
   }
+  function getPlayerHitbox() {
+  const margin = 10; // marge rondom sprite
+  return {
+    x: player.x + margin,
+    y: player.y + margin,
+    w: player.w - margin * 4,
+    h: player.h - margin * 2.5
+  };
+}
+
 
   // obstakels spawnen
   spawnTimer--;
@@ -130,12 +146,17 @@ function update() {
   }
 
   // botsing check
-  for (const o of obstacles) {
-    if (player.x < o.x + o.w && player.x + player.w > o.x && player.y < o.y + o.h && player.y + player.h > o.y) {
-      gameOver();
-      break;
-    }
+const hitbox = getPlayerHitbox();
+for (const o of obstacles) {
+  if (hitbox.x < o.x + o.w &&
+      hitbox.x + hitbox.w > o.x &&
+      hitbox.y < o.y + o.h &&
+      hitbox.y + hitbox.h > o.y) {
+    gameOver();
+    break;
   }
+}
+
 }
 
 // Game over
@@ -157,9 +178,15 @@ function draw() {
   ctx.fillStyle = '#04ff00ff';
   ctx.fillRect(0, groundY, canvas.width, 40);
 
-  // speler
+  // speler (teken sprite in plaats van blokje)
+if (playerImg.complete) {
+  ctx.drawImage(playerImg, player.x, player.y, player.w, player.h);
+} else {
+  // fallback: wit blokje als de afbeelding nog laadt
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.w, player.h);
+}
+
 
   // obstakels
   for (const o of obstacles) {
