@@ -155,7 +155,7 @@ function draw() {
 
   // grondlijn
   ctx.fillStyle = '#04ff00ff';
-  ctx.fillRect(2, groundY, canvas.width, 4);
+  ctx.fillRect(2, groundY, canvas.width, 40);
 
   // speler
   ctx.fillStyle = player.color;
