@@ -155,7 +155,7 @@ function draw() {
 
   // grondlijn
   ctx.fillStyle = '#04ff00ff';
-  ctx.fillRect(2, groundY, canvas.width, 40);
+  ctx.fillRect(0, groundY, canvas.width, 40);
 
   // speler
   ctx.fillStyle = player.color;
@@ -188,15 +188,17 @@ function loop() {
 
 // ---------------- CONTROLS ----------------
 
-// Springen met spatie
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && running) {
+  // check of toets spatie of pijltje omhoog is
+  if ((e.code === 'Space' || e.code === 'ArrowUp') && running) {
     // ook springen als je bijna op de grond bent
     if (player.onGround || player.y > groundY - player.h - 5) {
       player.vy = jumpForce;
     }
   }
 });
+
+
 
 // Restart knop
 restartBtn.addEventListener('click', () => {
