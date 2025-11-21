@@ -6,7 +6,6 @@ const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const restartBtn = document.getElementById('restart');
 
-<<<<<<< HEAD
 // Laad de sprite-afbeelding van de speler
 const playerImg = new Image();
 playerImg.src = 'assets/images/player.png'; 
@@ -20,28 +19,11 @@ const groundY = 260;
 const gravity = 0.6;
 const jumpForce = -11;
 let speed = 4;
-=======
-// Laad de sprite-afbeelding
-const playerImg = new Image();
-playerImg.src = 'assets/images/New Piskel.png';
-
-
-// Basis spelinstellingen
-const groundY = 260;     // hoogte van de grondlijn
-const gravity = 0.6;     // zwaartekracht (hoe snel je valt)
-const jumpForce = -11;   // sprongkracht (negatief = omhoog)
-let speed = 4;           // beginsnelheid van obstakels
->>>>>>> bd96f31b7c8a563cf2dc2c0069a3d079efcdacce
 
 const player = { 
   x: 120,
-<<<<<<< HEAD
   y: groundY - 20,   // hoogte = grondY - player.h
   w: 60, h: 60,
-=======
-  y: groundY - 60,   // hoogte aanpassen zodat hij op de grond staat
-  w: 60, h: 60,      // groter formaat (bijv. 80x80)
->>>>>>> bd96f31b7c8a563cf2dc2c0069a3d079efcdacce
   vy: 0,
   onGround: true,
 };
@@ -98,7 +80,6 @@ function resetGame() {
 
 
 function spawnObstacle() {
-<<<<<<< HEAD
   const w = Math.random() < 0.5 ? 30 : 45;
   const h = Math.random() < 0.5 ? 40 : 50;
   obstacles.push({
@@ -118,11 +99,6 @@ function getPlayerHitbox() {
     w: player.w - margin * 2,
     h: player.h - margin * 2
   };
-=======
-  const w = Math.random() < 0.5 ? 30 : 45; // willekeurige breedte
-  const h = Math.random() < 0.5 ? 40 : 50; // willekeurige hoogte
-  obstacles.push({ x: canvas.width + 20, y: groundY - h, w, h, color: '#000000ff' });
->>>>>>> bd96f31b7c8a563cf2dc2c0069a3d079efcdacce
 }
 
 function update() {
@@ -144,18 +120,7 @@ function update() {
     player.onGround = true;
   } else {
     player.onGround = false;
-  
   }
-  function getPlayerHitbox() {
-  const margin = 10; // marge rondom sprite
-  return {
-    x: player.x + margin,
-    y: player.y + margin,
-    w: player.w - margin * 4,
-    h: player.h - margin * 2.5
-  };
-}
-
 
   spawnTimer--;
   if (spawnTimer <= 0) {
@@ -169,7 +134,6 @@ function update() {
     if (obstacles[i].x + obstacles[i].w < 0) obstacles.splice(i, 1);
   }
 
-<<<<<<< HEAD
   const hitbox = getPlayerHitbox();
   for (const o of obstacles) {
     if (hitbox.x < o.x + o.w &&
@@ -182,23 +146,6 @@ function update() {
   }
 }
 
-=======
-  // botsing check
-const hitbox = getPlayerHitbox();
-for (const o of obstacles) {
-  if (hitbox.x < o.x + o.w &&
-      hitbox.x + hitbox.w > o.x &&
-      hitbox.y < o.y + o.h &&
-      hitbox.y + hitbox.h > o.y) {
-    gameOver();
-    break;
-  }
-}
-
-}
-
-// Game over
->>>>>>> bd96f31b7c8a563cf2dc2c0069a3d079efcdacce
 function gameOver() {
   running = false;
   restartBtn.disabled = false;
@@ -211,7 +158,6 @@ function draw() {
   ctx.fillStyle = '#02a6ff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-<<<<<<< HEAD
   ctx.fillStyle = '#04ff00';
   ctx.fillRect(0, groundY, canvas.width, 40);
 
@@ -229,26 +175,6 @@ function draw() {
       ctx.fillStyle = '#ff0000';
       ctx.fillRect(o.x, o.y, o.w, o.h);
     }
-=======
-  // grondlijn
-  ctx.fillStyle = '#04ff00ff';
-  ctx.fillRect(0, groundY, canvas.width, 40);
-
-  // speler (teken sprite in plaats van blokje)
-if (playerImg.complete) {
-  ctx.drawImage(playerImg, player.x, player.y, player.w, player.h);
-} else {
-  // fallback: wit blokje als de afbeelding nog laadt
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-}
-
-
-  // obstakels
-  for (const o of obstacles) {
-    ctx.fillStyle = o.color;
-    ctx.fillRect(o.x, o.y, o.w, o.h);
->>>>>>> bd96f31b7c8a563cf2dc2c0069a3d079efcdacce
   }
 
   if (!running) {
