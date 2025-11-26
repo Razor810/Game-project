@@ -81,7 +81,7 @@ function resetGame() {
 
 
 function spawnObstacle() {
-  const w = Math.random() < 9.0 ? 30 : 45;
+  const w = Math.random() < 9.0 ? 40 : 50;
   const h = Math.random() < 9.0 ? 40 : 50;
   obstacles.push({
     x: canvas.width + 20,
