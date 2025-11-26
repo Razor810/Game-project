@@ -12,7 +12,7 @@ playerImg.src = 'assets/images/player.png';
 
 // Laad de obstakel-afbeelding
 const obstacleImg = new Image();
-obstacleImg.src = 'assets/images/steen.png';
+obstacleImg.src = 'assets/images/enemy.png';
 
 // Basis spelinstellingen
 const groundY = 260;
@@ -22,11 +22,12 @@ let speed = 4;
 
 const player = { 
   x: 120,
-  y: groundY - 20,   // hoogte = grondY - player.h
+  y: groundY - 40,   // hoogte = grondY - player.h
   w: 60, h: 60,
   vy: 0,
   onGround: true,
 };
+
 
 
 // Variabelen voor spelstatus
@@ -80,8 +81,8 @@ function resetGame() {
 
 
 function spawnObstacle() {
-  const w = Math.random() < 0.5 ? 30 : 45;
-  const h = Math.random() < 0.5 ? 40 : 50;
+  const w = Math.random() < 9.0 ? 30 : 45;
+  const h = Math.random() < 9.0 ? 40 : 50;
   obstacles.push({
     x: canvas.width + 20,
     y: groundY - h,

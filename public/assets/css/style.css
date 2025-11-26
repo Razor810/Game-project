@@ -38,7 +38,7 @@ button {
 }
 
 button:disabled {
-  background:#2e2e2e;
+  background:#4CAF50;
   cursor:default;
 }
 
